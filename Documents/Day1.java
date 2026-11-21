@@ -1,7 +1,7 @@
 
 import java.util.*;
 
-public class Main {
+public class Day1 {
     public static void printMessage(String message) {
         System.out.println(message);
     }
