@@ -1,63 +1,69 @@
-package Day3;
+package Day7;
 
-import java.util.HashMap;
-import java.util.Scanner;
+
+import java.util.*;
 
 public class Main {
 
-    public static Node buildList() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter head data : ");
+    public static Node buildTree(Scanner sc, String message){
+        System.out.print(message);
         int data = sc.nextInt();
-        if(data == -1)
+        if(data == -1) {
             return null;
-        Node head = new Node(data);
-        Node tail = head;
-        while(true) {
-            System.out.print("Enter node data : ");
-            data = sc.nextInt();
-            if(data == -1) {
-                return head;
-            }
-            Node n1 = new Node(data);
-            tail.next = n1;
-            tail = n1;
         }
+        Node root = new Node(data);
+        root.left = buildTree(sc, "Enter left of " + data + " : ");  // Build tree recursively on left
+        root.right = buildTree(sc, "Enter right of " + data + " : "); // Build tree recursively on right
+        return root;
     }
-    public static void printList(Node head) {
-        if(head == null)
+    public static void dFT(Node root) {
+        if(root == null) {
             return;
-        System.out.print(head.data + " -> ");
-        printList(head.next);
+        }
+        System.out.print(root.data + " : ");
+        if(root.left != null) {
+            System.out.print("L" + root.left.data + " ");
+        }
+        if(root.right != null) {
+            System.out.print("R" + root.right.data);
+        }
+        System.out.println();
+        dFT(root.left);
+        dFT(root.right);
+    }
+
+    public static void bFT(Node root) {
+        if(root == null)
+            return;
+        Queue<Node> pendingNodes = new LinkedList<>();
+        pendingNodes.add(root);
+        while(!pendingNodes.isEmpty()) {
+            Node current = pendingNodes.poll();
+            System.out.print(current.data + " ");
+            if(current.left != null)
+                pendingNodes.add(current.left);
+            if(current.right != null)
+                pendingNodes.add(current.right);
+        }
     }
 
     public static void main(String[] args) {
-        Node head = buildList();
-        printList(head);
-        System.gc();
+        Scanner sc = new Scanner(System.in);
+        Node root = buildTree(sc, "Enter root data : ");
+        dFT(root);
+        bFT(root);
 
         /*
         Node n1 = new Node(10);
         Node n2 = new Node(20);
         Node n3 = new Node(30);
-        n1.next = n2;
-        n2.next = n3;
-        Node temp = n1;
-        while(temp != null) {
-            System.out.println(temp + " " + temp.data + " " + temp.next);
-            temp = temp.next;
-        }
-        System.out.println(n1);
-         */
-
-        /*
-        System.out.println("Before s1 -> " + Student.count);
-        Student s1 = new Student("Abc", "Vizag, AP");
-        System.out.println("After s1 -> " + Student.count);
-        Student s2 = new Student("Def", "Vizag, AP");
-        System.out.println("After s2 -> " + Student.count);
-        s1.printStudent();
-        s2.printStudent();
+        Node n4 = new Node(24);
+        Node n5 = new Node(45);
+        n1.left = n2;
+        n1.right = n3;
+        n2.left = n4;
+        n4.left = n5;
+        dFT(n1);
          */
     }
 }
